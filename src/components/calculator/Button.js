@@ -1,3 +1,7 @@
 import React from "react";
 
-export default ({ cName, text }) => <button className={cName}>{text}</button>;
+export default ({ cName, text, operation }) => (
+  <button onClick={e => operation(e)} className={cName}>
+    {text}
+  </button>
+);
