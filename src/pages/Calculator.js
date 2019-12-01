@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Display from "../components/calculator/Display";
 import Button from "../components/calculator/Button";
-import { toComputedKey } from "@babel/types";
 
 let data = [
   { key: 1, cName: "span-2", op: true, text: "AC" },
@@ -28,6 +27,7 @@ export default () => {
   let [curr, setCurr] = useState("");
   let [prev, setPrev] = useState("");
   let [op, setOp] = useState("");
+  let [test, setTest] = useState("");
   function compute() {
     console.log("yesss");
     let current = parseFloat(curr);
@@ -37,31 +37,60 @@ export default () => {
         setPrev(current + previous);
         setCurr("");
         break;
+      case "-":
+        setPrev(previous - current);
+        setCurr("");
+        break;
+      case "/":
+        setPrev(previous / current);
+        setCurr("");
+        break;
+      case "*":
+        setPrev(previous * current);
+        setCurr("");
+        break;
       default:
         console.log("lol");
+        break;
     }
   }
   function append(e) {
     let newInput = e.target.innerText;
     if (newInput === "." && curr.includes(".")) return;
     setCurr(curr + newInput);
-    console.log("hi");
   }
   function operation(e) {
+    let currentOp = e.target.innerText;
     if (!curr) {
+      console.log("no current");
+      setOp(currentOp);
+      return;
+    }
+    if (currentOp === "=") {
+      compute();
+      setCurr(prev);
+      setPrev("");
+      setOp("");
+      console.log("yo");
+
       return;
     }
 
-    if (prev) {
-      compute();
-      //   return;
-    }
+    setOp(currentOp);
+    setTest("fuck");
+    console.log(`for fucks sake ${op}`);
+    console.log(`fucking ${test}`);
+    if (!/DEL|AC|=/.test(currentOp)) {
+      console.log("no DEL");
+      console.log(`op: ${op} innertet ${currentOp}`);
+      if (prev && curr) {
+        compute();
+        return;
+      }
+      currentOp === "DEL"
+        ? setPrev(prev.slice(0, prev.length - 1))
+        : setPrev("") && setCurr("");
 
-    setOp(e.target.innerText);
-    if (!/DEL|AC|=/.test(op)) {
-      console.log("not DEL");
-      setPrev(curr + op);
-      setCurr("");
       return;
     }
     console.log("final");
@@ -70,7 +99,7 @@ export default () => {
   }
   return (
     <div className="Calc">
-      <Display curr={curr} prev={prev} />
+      <Display curr={curr} prev={prev} op={op} />
       {data.map(d => (
         <Button
           key={d.key}

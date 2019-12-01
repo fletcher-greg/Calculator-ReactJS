@@ -30,11 +30,15 @@
 
 .display {
   grid-column: 1/ -1;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  flex-direction: column;
   background: #1f271b;
   color: #f4d35e;
   font-weight: bold;
   font-size: 22px;
 }
-/* .display .curr {
-  margin-left: auto;
-} */
+.display .curr {
+  font-size: 30px;
+}
