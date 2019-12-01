@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Display from "../components/calculator/Display";
 import Button from "../components/calculator/Button";
 
@@ -24,6 +24,7 @@ let data = [
 ];
 
 export default () => {
+  function compute(e) {}
   return (
     <div className="Calc">
       <Display />
