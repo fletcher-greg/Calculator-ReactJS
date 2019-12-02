@@ -27,26 +27,27 @@ export default () => {
   let [curr, setCurr] = useState("");
   let [prev, setPrev] = useState("");
   let [op, setOp] = useState("");
-  let [test, setTest] = useState("");
+  let [complete, setComplete] = useState("");
+
   function compute() {
-    console.log("yesss");
+    console.log("compute");
     let current = parseFloat(curr);
     let previous = parseFloat(prev);
     switch (op) {
       case "+":
-        setPrev(current + previous);
+        setPrev(String(current + previous));
         setCurr("");
         break;
       case "-":
-        setPrev(previous - current);
+        setPrev(String(previous - current));
         setCurr("");
         break;
       case "/":
-        setPrev(previous / current);
+        setPrev(String(previous / current));
         setCurr("");
         break;
       case "*":
-        setPrev(previous * current);
+        setPrev(String(previous * current));
         setCurr("");
         break;
       default:
@@ -57,45 +58,67 @@ export default () => {
   function append(e) {
     let newInput = e.target.innerText;
     if (newInput === "." && curr.includes(".")) return;
-    setCurr(curr + newInput);
-  }
-  function operation(e) {
-    let currentOp = e.target.innerText;
-    if (!curr) {
-      console.log("no current");
-      setOp(currentOp);
+    if (complete === "=") {
+      setPrev(curr);
+
+      setCurr(newInput);
+      setComplete("");
       return;
     }
-    if (currentOp === "=") {
+    setCurr(curr + newInput);
+    console.log("concat");
+  }
+  function operation(e) {
+    let currentOp = String(e.target.innerText);
+    let notDelAC = !/DEL|AC|=/.test(currentOp);
+    if (notDelAC) {
+      setOp(notDelAC ? currentOp : op);
+      if (!curr) {
+        console.log("no current");
+
+        return;
+      }
+
+      if (notDelAC) {
+        console.log(`innerText ${currentOp}`);
+        if (prev && curr) {
+          console.log(`prev ${prev} curr ${curr}`);
+          compute();
+          return;
+        }
+        setPrev(curr);
+        setCurr("");
+        // currentOp === "DEL"
+        //   ? setPrev(prev.slice(0, prev.length - 1))
+        //   : setPrev("lol") && setCurr("lol");
+        // console.log("this far");
+        return;
+      }
+
+      console.log("final");
+      setPrev(curr);
+      setCurr("");
+    } else if (currentOp === "=" && op) {
+      console.log("the operation is: " + op);
       compute();
-      setCurr(prev);
-      setPrev("");
       setOp("");
+      setComplete("=");
       console.log("yo");
 
       return;
-    }
-
-    setOp(currentOp);
-    setTest("fuck");
-    console.log(`for fucks sake ${op}`);
-    console.log(`fucking ${test}`);
-    if (!/DEL|AC|=/.test(currentOp)) {
-      console.log("no DEL");
-      console.log(`op: ${op} innertet ${currentOp}`);
-      if (prev && curr) {
-        compute();
-        return;
+    } else {
+      console.log("trying");
+      if (currentOp === "DEL" && curr.length > 0) {
+        setCurr(curr.slice(0, curr.length - 1));
+      } else if (currentOp === "DEL") {
+        console.log(typeof prev);
+        op ? setOp("") : setPrev(prev.slice(0, prev.length - 1));
+      } else {
+        setCurr("");
+        setPrev("");
+        setOp("");
       }
-      currentOp === "DEL"
-        ? setPrev(prev.slice(0, prev.length - 1))
-        : setPrev("") && setCurr("");
-
-      return;
     }
-    console.log("final");
-    setPrev(curr);
-    setCurr("");
   }
   return (
     <div className="Calc">

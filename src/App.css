@@ -39,6 +39,16 @@
   font-weight: bold;
   font-size: 22px;
 }
+.display .prev,
 .display .curr {
-  font-size: 30px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.display .content {
+  margin: 0;
+}
+.display .curr > p {
+  font-size: 70px;
 }
