@@ -8,4 +8,4 @@ React.js
 
 Greg Fletcher
 
-                                                                    **v0.5.0**
+**v0.5.0**
